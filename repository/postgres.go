@@ -18,15 +18,15 @@ func BuildSQLInsert(table string, fields []string) string {
 
 	for k, v := range fields {
 		args += fmt.Sprintf("%s,", v)
-		vals += fmt.Sprintf("$%d,", k+2)
+		vals += fmt.Sprintf("$%d,", k+1)
 	}
 
 	if len(fields) > 0 {
-		args = args[:len(args)-1]
-		vals = vals[:len(vals)-1]
+		args = strings.TrimRight(args, ",")
+		args = strings.TrimRight(args, ",")
 	}
 
-	return fmt.Sprintf("INSERT INTO %s (id,%s) VALUES ($1,%s) RETURNING created_at", table, args, vals)
+	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) RETURNING created_at", table, args, vals)
 }
 
 // BuildSQLUpdateByID builds a query UPDATE of postgres
