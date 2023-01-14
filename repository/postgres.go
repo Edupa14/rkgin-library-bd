@@ -13,7 +13,7 @@ import (
 const _defaultMaxLimit = 100
 
 // BuildSQLInsert builds a query INSERT of postgres
-func BuildSQLInsert(table string, fields []string) string {
+func BuildSQLInsert(table, id string, fields []string) string {
 	var args, vals string
 
 	for k, v := range fields {
@@ -23,10 +23,10 @@ func BuildSQLInsert(table string, fields []string) string {
 
 	if len(fields) > 0 {
 		args = strings.TrimRight(args, ",")
-		args = strings.TrimRight(args, ",")
+		vals = strings.TrimRight(vals, ",")
 	}
 
-	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) RETURNING created_at", table, args, vals)
+	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) RETURNING %s", table, args, vals, id)
 }
 
 // BuildSQLUpdateByID builds a query UPDATE of postgres
